@@ -39,14 +39,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     private ?string $firstname = null;
 
-    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?Subscription $subscription = null;
-
     /**
      * @var Collection<int, File>
      */
     #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'user')]
     private Collection $file;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Subscription $subscription = null;
 
     public function __construct()
     {
@@ -152,18 +152,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getSubscription(): ?Subscription
-    {
-        return $this->subscription;
-    }
-
-    public function setSubscription(?Subscription $subscription): static
-    {
-        $this->subscription = $subscription;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, File>
      */
@@ -190,6 +178,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $file->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?Subscription $subscription): static
+    {
+        $this->subscription = $subscription;
 
         return $this;
     }

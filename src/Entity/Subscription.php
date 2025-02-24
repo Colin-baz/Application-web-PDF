@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SubscriptionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -35,8 +37,20 @@ class Subscription
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $special_price_to = null;
 
-    #[ORM\OneToOne(mappedBy: 'subscription', cascade: ['persist', 'remove'])]
-    private ?User $user = null;
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'subscription')]
+    private Collection $users;
+
+    /**
+     * @var Collection<int, User>
+     */
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -127,24 +141,36 @@ class Subscription
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return Collection<int, User>
+     */
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
     {
-        return $this->user;
+        return $this->users;
     }
 
-    public function setUser(?User $user): static
+    public function addUser(User $user): static
     {
-        // unset the owning side of the relation if necessary
-        if ($user === null && $this->user !== null) {
-            $this->user->setSubscription(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($user !== null && $user->getSubscription() !== $this) {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
             $user->setSubscription($this);
         }
 
-        $this->user = $user;
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getSubscription() === $this) {
+                $user->setSubscription(null);
+            }
+        }
 
         return $this;
     }
