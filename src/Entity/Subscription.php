@@ -37,15 +37,9 @@ class Subscription
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $special_price_to = null;
 
-    /**
-     * @var Collection<int, User>
-     */
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'subscription')]
     private Collection $users;
 
-    /**
-     * @var Collection<int, User>
-     */
 
     public function __construct()
     {
@@ -140,10 +134,6 @@ class Subscription
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, User>
-     */
 
     /**
      * @return Collection<int, User>
