@@ -23,29 +23,23 @@ class Subscription
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?int $max_pdf = null;
+    private ?int $maxPdf = null;
 
     #[ORM\Column]
     private ?int $price = null;
 
     #[ORM\Column]
-    private ?int $special_price = null;
+    private ?int $specialPrice = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $special_price_from = null;
+    private ?\DateTimeInterface $specialPriceFrom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $special_price_to = null;
+    private ?\DateTimeInterface $specialPriceTo = null;
 
-    /**
-     * @var Collection<int, User>
-     */
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'subscription')]
     private Collection $users;
 
-    /**
-     * @var Collection<int, User>
-     */
 
     public function __construct()
     {
@@ -83,12 +77,12 @@ class Subscription
 
     public function getMaxPdf(): ?int
     {
-        return $this->max_pdf;
+        return $this->maxPdf;
     }
 
-    public function setMaxPdf(int $max_pdf): static
+    public function setMaxPdf(int $maxPdf): static
     {
-        $this->max_pdf = $max_pdf;
+        $this->maxPdf = $maxPdf;
 
         return $this;
     }
@@ -107,43 +101,39 @@ class Subscription
 
     public function getSpecialPrice(): ?int
     {
-        return $this->special_price;
+        return $this->specialPrice;
     }
 
-    public function setSpecialPrice(int $special_price): static
+    public function setSpecialPrice(int $specialPrice): static
     {
-        $this->special_price = $special_price;
+        $this->specialPrice = $specialPrice;
 
         return $this;
     }
 
     public function getSpecialPriceFrom(): ?\DateTimeInterface
     {
-        return $this->special_price_from;
+        return $this->specialPriceFrom;
     }
 
-    public function setSpecialPriceFrom(\DateTimeInterface $special_price_from): static
+    public function setSpecialPriceFrom(\DateTimeInterface $specialPriceFrom): static
     {
-        $this->special_price_from = $special_price_from;
+        $this->specialPriceFrom = $specialPriceFrom;
 
         return $this;
     }
 
     public function getSpecialPriceTo(): ?\DateTimeInterface
     {
-        return $this->special_price_to;
+        return $this->specialPriceTo;
     }
 
-    public function setSpecialPriceTo(\DateTimeInterface $special_price_to): static
+    public function setSpecialPriceTo(\DateTimeInterface $specialPriceTo): static
     {
-        $this->special_price_to = $special_price_to;
+        $this->specialPriceTo = $specialPriceTo;
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, User>
-     */
 
     /**
      * @return Collection<int, User>
