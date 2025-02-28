@@ -3,3 +3,15 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+homepage:
+    path: /
+    controller: App\Controller\HomeController::index
+
+test_microservice:
+    path: /test-microservice
+    controller: App\Controller\MicroServiceController::fetchGitHubInformation
+
+generate_pdf:
+    path: /generate-pdf
+    controller: App\Controller\PdfController::generatePdf
