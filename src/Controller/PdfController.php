@@ -9,17 +9,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PdfController extends AbstractController
 {
-    public function __construct(private GotenbergService $gotenbergService)
+    private $gotenbergService;
+
+    public function __construct(GotenbergService $gotenbergService)
     {
+        $this->gotenbergService = $gotenbergService;
     }
 
+    /**
+     * @Route("/generate-pdf", name="generate_pdf")
+     */
     public function generatePdf(): Response
     {
-        $htmlContent = '<h1>Générateur de PDF</h1>';
-        $pdfContent = $this->gotenbergService->generatePdf($htmlContent);
-
-        return new Response($pdfContent, 200, [
-            'Content-Type' => 'application/pdf',
-        ]);
+        try {
+            $url = 'https://sparksuite.github.io/simple-html-invoice-template/';
+            $pdfContent = $this->gotenbergService->generatePdf($url);
+            return new Response($pdfContent, 200, [
+                'Content-Type' => 'application/pdf',
+            ]);
+        } catch (\Exception $e) {
+            return new Response('Erreur : ' . $e->getMessage(), 500);
+        }
     }
+
 }
+

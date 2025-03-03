@@ -15,3 +15,7 @@ test_microservice:
 generate_pdf:
     path: /generate-pdf
     controller: App\Controller\PdfController::generatePdf
+
+generate_pdf_from_html:
+    path: /generate-pdf-from-html
+    controller: App\Controller\HtmlPdfController::generatePdfFromHtml
