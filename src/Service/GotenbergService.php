@@ -29,9 +29,7 @@ class GotenbergService
                     'Content-Type' => 'multipart/form-data',
                 ],
                 'body' => [
-                    'files' => [
-                        'file' => fopen($tempFilePath, 'r'),
-                    ],
+                    'files' => fopen($tempFilePath, 'r'),
                 ],
             ]);
 
