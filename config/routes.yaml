@@ -3,3 +3,19 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+homepage:
+    path: /
+    controller: App\Controller\HomeController::index
+
+test_microservice:
+    path: /test-microservice
+    controller: App\Controller\MicroServiceController::fetchGitHubInformation
+
+generate_pdf_from_html:
+    path: /generate-pdf-from-html
+    controller: App\Controller\HtmlPdfController::generatePdfFromHtml
+
+pdf_generate:
+    path: /generate-pdf
+    controller: App\Controller\GeneratePdfController::generatePdf
