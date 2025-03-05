@@ -12,10 +12,10 @@ test_microservice:
     path: /test-microservice
     controller: App\Controller\MicroServiceController::fetchGitHubInformation
 
-generate_pdf:
-    path: /generate-pdf
-    controller: App\Controller\PdfController::generatePdf
-
 generate_pdf_from_html:
     path: /generate-pdf-from-html
     controller: App\Controller\HtmlPdfController::generatePdfFromHtml
+
+pdf_generate:
+    path: /generate-pdf
+    controller: App\Controller\GeneratePdfController::generatePdf
