@@ -1,20 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="https://play-lh.googleusercontent.com/vdj3rq2cK3PqSlrXxN6ou9F14Coh6k2oCgD-9aaQmtvWOMpImUGEz1kuz2rBQF5RYg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        {% block stylesheets %}
-        {% endblock %}
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Graphik, Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="https://play-lh.googleusercontent.com/vdj3rq2cK3PqSlrXxN6ou9F14Coh6k2oCgD-9aaQmtvWOMpImUGEz1kuz2rBQF5RYg" alt="Logo" width="40" height="40" class="d-inline-block align-text-top">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('subscription_change') }}">Abonnement</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('history') }}">Historique</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Connexion / Inscription -->
+        <div class="d-flex">
+            <a href="#" class="btn btn-outline-danger me-2">Connexion</a>
+            <a href="#" class="btn btn-danger">Inscription</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    {% block body %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

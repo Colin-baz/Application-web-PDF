@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Change Subscription{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="text-center">Change Your Subscription</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label for="subscription" class="form-label">Select a Plan</label>
+                <select id="subscription" name="subscription" class="form-control">
+                    <option value="basic">Basic</option>
+                    <option value="premium">Premium</option>
+                    <option value="pro">Pro</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Update Subscription</button>
+        </form>
+    </div>
+{% endblock %}
