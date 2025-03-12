@@ -15,4 +15,3 @@ class SubscriptionController extends AbstractController
         return $this->render('subscription/index.html.twig');
     }
 }
-

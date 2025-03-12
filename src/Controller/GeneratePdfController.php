@@ -39,4 +39,3 @@ class GeneratePdfController extends AbstractController
         ]);
     }
 }
-

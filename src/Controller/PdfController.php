@@ -31,6 +31,4 @@ class PdfController extends AbstractController
             return new Response('Erreur : ' . $e->getMessage(), 500);
         }
     }
-
 }
-
