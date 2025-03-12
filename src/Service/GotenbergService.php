@@ -1,9 +1,9 @@
 <?php
 
-
 namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use RuntimeException;
 
 class GotenbergService
 {
@@ -30,7 +30,7 @@ class GotenbergService
 
             return $response->getContent();
         } catch (\Exception $e) {
-            throw new \RuntimeException('Erreur lors de la génération du PDF : ' . $e->getMessage());
+            throw new RuntimeException('Erreur lors de la génération du PDF : ' . $e->getMessage());
         }
     }
 }
