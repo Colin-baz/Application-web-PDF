@@ -8,7 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\EqualTo;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ChangePasswordFormType extends AbstractType
 {
@@ -35,12 +36,20 @@ class ChangePasswordFormType extends AbstractType
                     new NotBlank([
                         'message' => 'Veuillez confirmer votre mot de passe',
                     ]),
-                    new EqualTo([
-                        'value' => $builder->get('plainPassword')->getData(),
-                        'message' => 'Les mots de passe ne correspondent pas.',
-                    ]),
+                    new Callback([$this, 'validatePasswords']),
                 ],
             ]);
+    }
+
+    public function validatePasswords($confirmPassword, ExecutionContextInterface $context): void
+    {
+        $form = $context->getRoot();
+        $plainPassword = $form->get('plainPassword')->getData();
+
+        if ($plainPassword !== $confirmPassword) {
+            $context->buildViolation('Les mots de passe ne correspondent pas.')
+                ->addViolation();
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
