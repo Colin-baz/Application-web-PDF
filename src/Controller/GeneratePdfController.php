@@ -29,7 +29,6 @@ class GeneratePdfController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $url = $form->getData()['url'];
 
             $pdfContent = $this->pdfService->generatePdfFromUrl($url);
