@@ -7,18 +7,24 @@ use RuntimeException;
 
 class GotenbergService
 {
-    private $httpClient;
-    private $gotenbergUrl;
+    private HttpClientInterface $httpClient;
+    private string $gotenbergUrl;
 
     public function __construct(HttpClientInterface $httpClient, string $gotenbergUrl)
     {
         $this->httpClient = $httpClient;
-        $this->gotenbergUrl = $gotenbergUrl;
+        $this->gotenbergUrl = rtrim($gotenbergUrl, '/'); // Assurer que l'URL est bien formatée
     }
 
     public function generatePdfFromUrl(string $url): string
     {
+        if (empty($url)) {
+            throw new RuntimeException('L’URL fournie est vide.');
+        }
+
         try {
+            dump("Envoi de l'URL à Gotenberg : " . $url);
+
             $response = $this->httpClient->request('POST', $this->gotenbergUrl . '/forms/chromium/convert/url', [
                 'headers' => [
                     'Content-Type' => 'multipart/form-data',
@@ -27,6 +33,12 @@ class GotenbergService
                     'url' => $url,
                 ],
             ]);
+
+            $statusCode = $response->getStatusCode();
+            if ($statusCode !== 200) {
+                $errorMessage = $response->getContent(false); // Récupérer la réponse en cas d'erreur
+                throw new RuntimeException("Erreur HTTP $statusCode lors de la génération du PDF : " . $errorMessage);
+            }
 
             return $response->getContent();
         } catch (\Exception $e) {
