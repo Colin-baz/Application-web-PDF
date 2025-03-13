@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
+use DateTime;
 
 class GeneratePdfController extends AbstractController
 {
@@ -41,7 +42,7 @@ class GeneratePdfController extends AbstractController
             $file = new File();
             $file->setUser($this->getUser())
                  ->setName($pdfFileName)
-                 ->setCreatedAt(new \DateTime());
+                 ->setCreatedAt(new DateTime());
 
             $this->entityManager->persist($file);
             $this->entityManager->flush();
