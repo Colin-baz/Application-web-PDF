@@ -7,13 +7,32 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<File>
+ * @extends ServiceEntityRepository<Pdf>
+ *
+ * @method Pdf|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Pdf|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Pdf[]    findAll()
+ * @method Pdf[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class FileRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, File::class);
+    }
+
+    public function countPdfGeneratedByUserOnDate($userId, $startOfDay, $endOfDay)
+    {
+
+        return $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->where('p.user = :userId')
+            ->andWhere('p.createdAt BETWEEN :startOfDay AND :endOfDay')
+            ->setParameter('userId', $userId)
+            ->setParameter('startOfDay', $startOfDay)
+            ->setParameter('endOfDay', $endOfDay)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     //    /**
