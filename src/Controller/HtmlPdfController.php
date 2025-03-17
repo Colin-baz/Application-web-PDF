@@ -50,7 +50,10 @@ class HtmlPdfController extends AbstractController
                     $pdfFileName = 'generated_pdf_' . uniqid() . '.pdf';
                     $pdfFilePath = '/pdf/' . $pdfFileName;
 
-                    file_put_contents($this->getParameter('kernel.project_dir') . '/public' . $pdfFilePath, $pdfContent);
+                    file_put_contents(
+                        $this->getParameter('kernel.project_dir') . '/public' . $pdfFilePath,
+                        $pdfContent
+                    );
 
                     return $this->render('generate_pdf/show_pdf.html.twig', [
                         'pdfFilePath' => $pdfFilePath,
