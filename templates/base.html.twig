@@ -31,8 +31,14 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="/">Accueil</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('pdf_generate') }}">Générer un PDF</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Générer un PDF
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ path('pdf_generate') }}">URL</a></li>
+                        <li><a class="dropdown-item" href="{{ path('generate_pdf_from_html') }}">HTML</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('subscription_change') }}">Abonnement</a>

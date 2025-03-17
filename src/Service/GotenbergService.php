@@ -3,46 +3,66 @@
 namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\Response;
 use RuntimeException;
 
 class GotenbergService
 {
     private HttpClientInterface $httpClient;
     private string $gotenbergUrl;
+    private string $uploadDir;
 
     public function __construct(HttpClientInterface $httpClient, string $gotenbergUrl)
     {
         $this->httpClient = $httpClient;
-        $this->gotenbergUrl = rtrim($gotenbergUrl, '/'); // Assurer que l'URL est bien formatée
+        $this->gotenbergUrl = rtrim($gotenbergUrl, '/');
+        $this->uploadDir = __DIR__ . '/../../public/uploads/';
     }
-
     public function generatePdfFromUrl(string $url): string
     {
-        if (empty($url)) {
-            throw new RuntimeException('L’URL fournie est vide.');
+        try {
+            $response = $this->httpClient->request('POST', $this->gotenbergUrl . '/forms/chromium/convert/url', [
+                'headers' => ['Content-Type' => 'multipart/form-data'],
+                'body' => ['url' => $url],
+            ]);
+
+
+            return $response->getContent();
+        } catch (\Exception $e) {
+            throw new RuntimeException('Erreur lors de la génération du PDF depuis une URL : ' . $e->getMessage());
+        }
+    }
+
+    public function generatePdfFromHtml(string $htmlContent): string
+    {
+        $fileName = 'index.html';
+        $tempFile = $this->uploadDir . $fileName;
+
+        file_put_contents($tempFile, $htmlContent);
+
+        if (!file_exists($tempFile)) {
+            throw new RuntimeException("Le fichier temporaire n'a pas été créé : " . $tempFile);
         }
 
         try {
-            dump("Envoi de l'URL à Gotenberg : " . $url);
-
-            $response = $this->httpClient->request('POST', $this->gotenbergUrl . '/forms/chromium/convert/url', [
+            $response = $this->httpClient->request('POST', $this->gotenbergUrl . '/forms/chromium/convert/html', [
                 'headers' => [
                     'Content-Type' => 'multipart/form-data',
                 ],
                 'body' => [
-                    'url' => $url,
+                    'files' => fopen($tempFile, 'r'),
                 ],
             ]);
 
-            $statusCode = $response->getStatusCode();
-            if ($statusCode !== 200) {
-                $errorMessage = $response->getContent(false); // Récupérer la réponse en cas d'erreur
-                throw new RuntimeException("Erreur HTTP $statusCode lors de la génération du PDF : " . $errorMessage);
-            }
-
-            return $response->getContent();
+            $pdfContent = $response->getContent();
         } catch (\Exception $e) {
             throw new RuntimeException('Erreur lors de la génération du PDF : ' . $e->getMessage());
+        } finally {
+            if (file_exists($tempFile)) {
+                unlink($tempFile);
+            }
         }
+
+        return $pdfContent;
     }
 }
