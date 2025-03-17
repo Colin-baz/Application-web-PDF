@@ -1,50 +1,72 @@
 <?php
 
-// src/Controller/HtmlPdfController.php
-
 namespace App\Controller;
 
+use App\Form\HtmlPdfUpload;
 use App\Service\GotenbergService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HtmlPdfController extends AbstractController
 {
-    private $gotenbergService;
+    private GotenbergService $pdfService;
 
-    public function __construct(GotenbergService $gotenbergService)
+    public function __construct(GotenbergService $pdfService)
     {
-        $this->gotenbergService = $gotenbergService;
+        $this->pdfService = $pdfService;
     }
 
-    /**
-     * @Route("/generate-pdf-from-html", name="generate_pdf_from_html", methods={"GET"})
-     */
-    public function generatePdfFromHtml(): Response
+    #[Route('/generate-pdf-from-html', name: 'generate_pdf_from_html')]
+    public function generatePdfFromHtml(Request $request): Response
     {
-        try {
-            $htmlContent = '
-                <!DOCTYPE html>
-                <html lang="fr">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Mon Document HTML</title>
-                </head>
-                <body>
-                    <h1>Bonjour, ceci est un document HTML</h1>
-                    <p>Ce contenu sera converti en PDF.</p>
-                </body>
-                </html>
-            ';
+        $form = $this->createForm(HtmlPdfUpload::class);
+        $form->handleRequest($request);
 
-            $pdfContent = $this->gotenbergService->generatePdfFromHtml($htmlContent);
-            return new Response($pdfContent, 200, [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="document.pdf"',
-            ]);
-        } catch (\Exception $e) {
-            return new Response('Erreur : ' . $e->getMessage(), 500);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $htmlFile = $form->get('htmlFile')->getData();
+
+            if ($htmlFile) {
+                $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/';
+
+                $tempFileName = 'index.html';
+                $tempFilePath = $uploadDir . $tempFileName;
+
+                try {
+                    $htmlFile->move($uploadDir, $tempFileName);
+                } catch (FileException $e) {
+                    return new Response("Erreur lors de l'upload du fichier : " . $e->getMessage(), 500);
+                }
+
+                $htmlContent = file_get_contents($tempFilePath);
+
+                try {
+                    // Passer le contenu HTML au service pour la génération du PDF
+                    $pdfContent = $this->pdfService->generatePdfFromHtml($htmlContent);
+
+                    // Génération du nom du fichier PDF
+                    $pdfFileName = 'generated_pdf_' . uniqid() . '.pdf';
+                    $pdfFilePath = '/pdf/' . $pdfFileName;
+
+                    file_put_contents($this->getParameter('kernel.project_dir') . '/public' . $pdfFilePath, $pdfContent);
+
+                    return $this->render('generate_pdf/show_pdf.html.twig', [
+                        'pdfFilePath' => $pdfFilePath,
+                    ]);
+                } catch (\Exception $e) {
+                    return new Response("Erreur lors de la génération du PDF : " . $e->getMessage(), 500);
+                } finally {
+                    if (file_exists($tempFilePath)) {
+                        unlink($tempFilePath);
+                    }
+                }
+            }
         }
+
+        return $this->render('generate_pdf/upload_html.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }
