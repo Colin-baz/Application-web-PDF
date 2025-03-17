@@ -51,6 +51,3 @@ class SubscriptionController extends AbstractController
         ]);
     }
 }
-
-
-
