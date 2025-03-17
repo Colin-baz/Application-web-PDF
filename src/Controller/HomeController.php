@@ -9,6 +9,7 @@ use App\Entity\File;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use DateTime;
 
 class HomeController extends AbstractController
 {
@@ -22,8 +23,8 @@ class HomeController extends AbstractController
 
         $subscription = $user->getSubscription();
 
-        $today = new \DateTime('today 00:00:00');
-        $tomorrow = new \DateTime('tomorrow 00:00:00');
+        $today = new DateTime('today 00:00:00');
+        $tomorrow = new DateTime('tomorrow 00:00:00');
 
         $pdfGeneratedToday = $entityManager->getRepository(File::class)
             ->countPdfGeneratedByUserOnDate($user->getId(), $today, $tomorrow);

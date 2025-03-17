@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Subscription;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use DateTime;
 
 class AppFixtures extends Fixture
 {
@@ -17,8 +18,8 @@ class AppFixtures extends Fixture
                 'maxPdf' => 10,
                 'price' => 0,
                 'specialPrice' => 0,
-                'specialPriceFrom' => new \DateTime(),
-                'specialPriceTo' => new \DateTime()
+                'specialPriceFrom' => new DateTime(),
+                'specialPriceTo' => new DateTime()
             ],
             [
                 'name' => 'Pro',
@@ -26,8 +27,8 @@ class AppFixtures extends Fixture
                 'maxPdf' => 100,
                 'price' => 9.99,
                 'specialPrice' => 7.99,
-                'specialPriceFrom' => new \DateTime('2025-08-08'),
-                'specialPriceTo' => new \DateTime('2025-06-30')
+                'specialPriceFrom' => new DateTime('2025-08-08'),
+                'specialPriceTo' => new DateTime('2025-06-30')
             ],
             [
                 'name' => 'Entreprise',
@@ -35,8 +36,8 @@ class AppFixtures extends Fixture
                 'maxPdf' => 10000,
                 'price' => 99.00,
                 'specialPrice' => 79.00,
-                'specialPriceFrom' => new \DateTime('2025-08-08'),
-                'specialPriceTo' => new \DateTime('2025-12-31')
+                'specialPriceFrom' => new DateTime('2025-08-08'),
+                'specialPriceTo' => new DateTime('2025-12-31')
             ]
         ];
 
