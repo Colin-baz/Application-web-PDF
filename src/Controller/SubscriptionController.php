@@ -41,7 +41,7 @@ class SubscriptionController extends AbstractController
                 $user->setSubscription($selectedSubscription);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('subscription_index');
+                return $this->redirectToRoute('subscription_change');
             }
         }
 
