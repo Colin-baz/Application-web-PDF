@@ -7,11 +7,14 @@
         <h2 class="text-center">Change Your Subscription</h2>
         <form method="post">
             <div class="mb-3">
-                <label for="subscription" class="form-label">Select a Plan</label>
+                <label for="subscription" class="form-label">Selectionnez un abonnement</label>
                 <select id="subscription" name="subscription" class="form-control">
-                    <option value="basic">Basic</option>
-                    <option value="premium">Premium</option>
-                    <option value="pro">Pro</option>
+                    {% for subscription in subscriptions %}
+                        <option value="{{ subscription.name }}"
+                                {% if app.user.subscription is not null and app.user.subscription.name == subscription.name %}selected{% endif %}>
+                            {{ subscription.name }} - {{ subscription.price }}€/mo
+                        </option>
+                    {% endfor %}
                 </select>
             </div>
             <button type="submit" class="btn btn-success">Update Subscription</button>

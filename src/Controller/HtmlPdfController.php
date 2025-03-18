@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class HtmlPdfController extends AbstractController
 {
@@ -19,7 +18,6 @@ class HtmlPdfController extends AbstractController
         $this->pdfService = $pdfService;
     }
 
-    #[Route('/generate-pdf-from-html', name: 'generate_pdf_from_html')]
     public function generatePdfFromHtml(Request $request): Response
     {
         $form = $this->createForm(HtmlPdfUpload::class);
