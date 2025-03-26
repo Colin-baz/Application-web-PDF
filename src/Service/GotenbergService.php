@@ -65,4 +65,37 @@ class GotenbergService
 
         return $pdfContent;
     }
+
+    public function generateCustomPdf(string $htmlContent): string
+    {
+        $fileName = 'index.html';
+        $tempFile = $this->uploadDir . $fileName;
+
+        file_put_contents($tempFile, $htmlContent);
+
+        if (!file_exists($tempFile)) {
+            throw new RuntimeException("Le fichier temporaire n'a pas été créé : " . $tempFile);
+        }
+
+        try {
+            $response = $this->httpClient->request('POST', $this->gotenbergUrl . '/forms/chromium/convert/html', [
+                'headers' => [
+                    'Content-Type' => 'multipart/form-data',
+                ],
+                'body' => [
+                    'files' => fopen($tempFile, 'r'),
+                ],
+            ]);
+
+            $pdfContent = $response->getContent();
+        } catch (\Exception $e) {
+            throw new RuntimeException('Erreur lors de la génération du PDF : ' . $e->getMessage());
+        } finally {
+            if (file_exists($tempFile)) {
+                unlink($tempFile);
+            }
+        }
+
+        return $pdfContent;
+    }
 }
