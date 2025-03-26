@@ -8,14 +8,13 @@
         <p>Générer des PDF à l'aide d'URL, de fichier HTML</p>
 
         <div class="mt-4">
-            <h4>Nombre de PDF générés</h4>
+            <h4>Nombre de PDF générés : ({{ pdfGeneratedToday }} / {{ maxPdfLimit }})</h4>
             <div class="progress mt-3" style="height: 25px;">
                 <div class="progress-bar" role="progressbar"
                      style="width: {{ progress }}%;"
                      aria-valuenow="{{ pdfGeneratedToday }}"
                      aria-valuemin="0"
                      aria-valuemax="{{ maxPdfLimit }}">
-                    {{ pdfGeneratedToday }} / {{ maxPdfLimit }} PDFs générés
                 </div>
             </div>
 

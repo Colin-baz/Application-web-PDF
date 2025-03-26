@@ -20,6 +20,10 @@ pdf_generate:
     path: /generate-pdf
     controller: App\Controller\GeneratePdfController::generatePdf
 
+generate_pdf_custom:
+    path: /generate-pdf-custom
+    controller: App\Controller\CustomPdfController::generatePdfFromWysiwyg
+
 history:
     path: /history
     controller: App\Controller\HistoryController::index
