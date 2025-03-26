@@ -53,6 +53,9 @@
         <div class="d-flex align-items-center">
             {% if app.user %}
                 <span class="me-3">Bonjour {{ app.user.firstname }} !</span>
+                <a href="{{ path('profile') }}" class="nav-link me-3">
+                    <i class="fas fa-user-circle"></i>
+                </a>
                 <a href="{{ path('app_logout') }}" class="btn btn-outline-danger">Déconnexion</a>
             {% else %}
                 <a href="{{ path('app_login') }}" class="btn btn-outline-danger me-2">Connexion</a>

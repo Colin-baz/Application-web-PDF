@@ -35,6 +35,17 @@ class FileRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function countFilesGeneratedByUser($userId): int
+    {
+        return $this->createQueryBuilder('f')
+            ->select('COUNT(f.id)')
+            ->where('f.user = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
     //    /**
     //     * @return File[] Returns an array of File objects
     //     */

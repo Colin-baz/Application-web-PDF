@@ -32,6 +32,15 @@ history_download:
     path: /history/download/{id}
     controller: App\Controller\HistoryController::downloadPdf
 
+profile:
+    path: /profile
+    controller: App\Controller\ProfileController::index
+
+delete_account:
+    path: /profile/delete
+    controller: App\Controller\ProfileController::deleteAccount
+    methods: POST
+
 app_register:
     path: /register
     controller: App\Controller\RegistrationController::register
