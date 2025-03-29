@@ -77,4 +77,3 @@ class CustomPdfController extends AbstractController
         ]);
     }
 }
-
