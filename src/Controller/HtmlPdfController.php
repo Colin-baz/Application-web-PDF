@@ -23,13 +23,29 @@ class HtmlPdfController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-
     public function generatePdfFromHtml(Request $request): Response
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $subscription = $user->getSubscription();
+        $maxPdfLimit = $subscription ? $subscription->getMaxPdf() : 0;
+        $pdfGenerated = $this->entityManager->getRepository(File::class)
+            ->countFilesGeneratedByUser($user->getId());
+
         $form = $this->createForm(HtmlPdfUpload::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($pdfGenerated >= $maxPdfLimit) {
+                $this->addFlash('error', "Vous avez atteint votre limite de génération de PDFs (Max: $maxPdfLimit)");
+                return $this->render('generate_pdf/upload_html.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
             $htmlFile = $form->get('htmlFile')->getData();
 
             if ($htmlFile) {
@@ -58,7 +74,7 @@ class HtmlPdfController extends AbstractController
                     );
 
                     $file = new File();
-                    $file->setUser($this->getUser())
+                    $file->setUser($user)
                         ->setName($pdfFileName)
                         ->setCreatedAt(new DateTime());
 
@@ -83,3 +99,4 @@ class HtmlPdfController extends AbstractController
         ]);
     }
 }
+
