@@ -23,6 +23,13 @@ class GeneratePdfController extends AbstractController
 
     public function generatePdf(Request $request): Response
     {
+        $user = $this->getUser();
+        $subscription = $user->getSubscription();
+        $maxPdfLimit = $subscription ? $subscription->getMaxPdf() : 0;
+
+        $pdfGenerated = $this->entityManager->getRepository(File::class)
+            ->countFilesGeneratedByUser($user->getId());
+
         $form = $this->createFormBuilder()
             ->add('url', null, ['required' => true])
             ->getForm();
@@ -30,8 +37,14 @@ class GeneratePdfController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $url = $form->getData()['url'];
+            if ($pdfGenerated >= $maxPdfLimit) {
+                $this->addFlash('error', "Vous avez atteint votre limite de génération de PDFs (Max: $maxPdfLimit)");
+                return $this->render('generate_pdf/index.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
 
+            $url = $form->getData()['url'];
             $pdfContent = $this->pdfService->generatePdfFromUrl($url);
 
             $pdfFileName = 'generated_pdf_' . uniqid() . '.pdf';
@@ -40,9 +53,9 @@ class GeneratePdfController extends AbstractController
             file_put_contents($pdfFilePath, $pdfContent);
 
             $file = new File();
-            $file->setUser($this->getUser())
-                 ->setName($pdfFileName)
-                 ->setCreatedAt(new DateTime());
+            $file->setUser($user)
+                ->setName($pdfFileName)
+                ->setCreatedAt(new DateTime());
 
             $this->entityManager->persist($file);
             $this->entityManager->flush();

@@ -17,6 +17,9 @@
                     <i class="fas fa-file-pdf"></i> Générer le PDF
                 </button>
             </div>
+            {% for message in app.flashes('error') %}
+                <p class="text-danger text-center mt-3">{{ message }}</p>
+            {% endfor %}
             {{ form_end(form) }}
         </div>
     </div>

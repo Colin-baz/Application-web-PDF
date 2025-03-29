@@ -22,27 +22,42 @@ class CustomPdfController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-
     public function generatePdfFromWysiwyg(Request $request): Response
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login'); // Redirige vers la page de connexion si non connecté
+        }
+
+        $subscription = $user->getSubscription();
+        $maxPdfLimit = $subscription ? $subscription->getMaxPdf() : 0;
+        $pdfGenerated = $this->entityManager->getRepository(File::class)
+            ->countFilesGeneratedByUser($user->getId());
+
         $form = $this->createForm(CustomPdfType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($pdfGenerated >= $maxPdfLimit) {
+                $this->addFlash('error', "Vous avez atteint votre limite de génération de PDFs (Max: $maxPdfLimit)");
+                return $this->render('generate_pdf/wysiwyg_form.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
             $htmlContent = $form->get('content')->getData();
 
             try {
                 $pdfContent = $this->pdfService->generateCustomPdf($htmlContent);
 
                 $uploadDir = $this->getParameter('kernel.project_dir') . '/public/pdf/';
-
                 $pdfFileName = 'custom_pdf_' . uniqid() . '.pdf';
                 $pdfFilePath = $uploadDir . $pdfFileName;
 
                 file_put_contents($pdfFilePath, $pdfContent);
 
                 $file = new File();
-                $file->setUser($this->getUser())
+                $file->setUser($user)
                     ->setName($pdfFileName)
                     ->setCreatedAt(new DateTime());
 
