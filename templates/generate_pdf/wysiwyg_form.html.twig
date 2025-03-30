@@ -3,17 +3,17 @@
 {% block title %}Générer un PDF WYSIWYG{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h2 class="text-center">Créer un PDF Personnalisé</h2>
+    <div class="edit-container mt-5 text-center">
+        <h2 class="mb-4" style="color: #8A2BE2;">Créer un PDF Personnalisé</h2>
 
-        <div class="card shadow-lg p-4">
+        <div class="mb-3">
             {{ form_start(form) }}
             <div class="mb-3">
                 {{ form_label(form.content, 'Éditez votre document:', {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(form.content, {'attr': {'class': 'form-control wysiwyg-editor', 'id': 'wysiwyg-editor', 'required': false}}) }}
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn-custom">
                     <i class="fas fa-file-pdf"></i> Générer le PDF
                 </button>
             </div>
@@ -23,6 +23,34 @@
             {{ form_end(form) }}
         </div>
     </div>
+
+    <style>
+        .btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            border: 2px solid #8A2BE2;
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-custom:hover {
+            background-color: white;
+            color: #8A2BE2;
+            border: 2px solid #8A2BE2;
+        }
+
+        .edit-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+    </style>
 
     <script src="https://cdn.tiny.cloud/1/h55kslqa4nfdo46q6xkd819er7e6dbu37zkuybw3s2lupf8n/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>

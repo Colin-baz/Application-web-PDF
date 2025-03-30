@@ -45,7 +45,6 @@ class SubscriptionController extends AbstractController
             }
         }
 
-        // Afficher la page avec les abonnements
         return $this->render('subscription/index.html.twig', [
             'subscriptions' => $subscriptions,
         ]);

@@ -3,42 +3,82 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+    <div class="login-container">
+        <div class="login-box">
+            {% for flash_error in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+            {% endfor %}
 
-    <h1>Inscription</h1>
+            <h1 class="h3 mb-3 font-weight-normal">Inscription</h1>
 
-    {{ form_errors(registrationForm) }}
+            {{ form_errors(registrationForm) }}
 
-    <div class="registration-form">
-        {{ form_start(registrationForm) }}
-        <div class="form-group">
-            {{ form_label(registrationForm.firstname) }}
-            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control'}}) }}
+            {{ form_start(registrationForm) }}
+            <div class="form-group">
+                {{ form_label(registrationForm.firstname , 'Prénom') }}
+                {{ form_widget(registrationForm.firstname, {'attr': {'class': 'form-control mt-2'}}) }}
+            </div>
+
+            <div class="form-group mt-2">
+                {{ form_label(registrationForm.lastname , 'Nom') }}
+                {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control mt-2'}}) }}
+            </div>
+
+            <div class="form-group mt-2">
+                {{ form_label(registrationForm.email) }}
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control mt-2'}}) }}
+            </div>
+
+            <div class="form-group mt-2">
+                {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control mt-2'}}) }}
+            </div>
+
+            <button type="submit" class="btn-custom mt-3">S'inscrire</button>
+            {{ form_end(registrationForm) }}
         </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.lastname) }}
-            {{ form_widget(registrationForm.lastname, {'attr': {'class': 'form-control'}}) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.email) }}
-            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
-        </div>
-
-        <div class="form-group">
-            {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}
-            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
-        </div>
-
-        <div class="form-check">
-            {{ form_widget(registrationForm.agreeTerms) }}
-            {{ form_label(registrationForm.agreeTerms) }}
-        </div>
-
-        <button type="submit" class="btn btn-primary">S'inscrire</button>
-        {{ form_end(registrationForm) }}
     </div>
+
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+        }
+        .login-box {
+            width: 550px;
+            height: auto;
+            padding: 20px;
+            border: 2px solid #8A2BE2;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .login-box h1 {
+            margin-bottom: 20px;
+            color: #8A2BE2;
+        }
+        .login-box a {
+            text-decoration: none;
+            color: #8A2BE2;
+        }
+        .login-box a:hover {
+            text-decoration: underline;
+        }
+        .btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            border: 2px solid #8A2BE2;
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-custom:hover {
+            background-color: white;
+            color: #8A2BE2;
+            border: 2px solid #8A2BE2;
+        }
+    </style>
 {% endblock %}

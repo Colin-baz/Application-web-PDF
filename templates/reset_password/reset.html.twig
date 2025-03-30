@@ -3,11 +3,54 @@
 {% block title %}Réinitialiser votre mot de passe{% endblock %}
 
 {% block body %}
-    <h1>Réinitialiser votre mot de passe</h1>
+    <div class="reset-container mt-5 text-center">
+        <h1 style="color: #8A2BE2;">Réinitialiser votre mot de passe</h1>
 
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        {{ form_row(resetForm.confirmPassword) }}
-        <button class="btn btn-primary">Réinitialiser</button>
-    {{ form_end(resetForm) }}
+        {{ form_start(resetForm) }}
+        <div class="mb-3">
+            {{ form_label(resetForm.plainPassword, 'Nouveau mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(resetForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(resetForm.confirmPassword, 'Confirmer le mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(resetForm.confirmPassword, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <button type="submit" class="btn-custom mt-3">Réinitialiser</button>
+        {{ form_end(resetForm) }}
+    </div>
+
+    <style>
+        .btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            border: 2px solid #8A2BE2;
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-custom:hover {
+            background-color: white;
+            color: #8A2BE2;
+            border: 2px solid #8A2BE2;
+        }
+
+        .reset-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #8A2BE2;
+        }
+
+        .form-text {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
 {% endblock %}
