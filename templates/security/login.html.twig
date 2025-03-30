@@ -3,38 +3,81 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+    <div class="login-container">
+        <div class="login-box">
+            <form method="post">
 
-        {% if app.user %}
-            <div class="mb-3">
-                Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
-            </div>
-        {% endif %}
+                {% if app.user %}
+                    <div class="mb-3">
+                        Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    </div>
+                {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Connectez-vous</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                <h1 class="h3 mb-3 font-weight-normal">Connectez-vous</h1>
+                <label for="username">Email</label>
+                <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control mt-2" autocomplete="email" required autofocus>
+                <label class="mt-2" for="password">Mot de passe</label>
+                <input type="password" name="_password" id="password" class="form-control mt-2" autocomplete="current-password" required>
 
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
-        <div class="checkbox mb-3">
-            <input type="checkbox" name="_remember_me" id="_remember_me">
-            <label for="_remember_me">Se souvenir de moi</label>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                {% if error %}
+                    <div class="alert alert-danger mt-3">Email ou mot de passe incorrect</div>
+                {% endif %}
+
+                <p class="mt-4">
+                    <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
+                </p>
+
+                <p class="mt-2">
+                    <a href="{{ path('app_register') }}">Vous n'avez pas de compte ?</a>
+                </p>
+
+                <button class="btn-custom" type="submit">Se connecter</button>
+            </form>
         </div>
+    </div>
 
-        <p class="mt-2">
-            <a href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
-        </p>
-
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Se connecter
-        </button>
-    </form>
+    <style>
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60vh;
+        }
+        .login-box {
+            width: 550px;
+            height: auto;
+            padding: 20px;
+            border: 2px solid #8A2BE2;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .login-box h1 {
+            margin-bottom: 20px;
+            color: #8A2BE2;
+        }
+        .login-box a {
+            text-decoration: none;
+            color: #8A2BE2;
+        }
+        .login-box a:hover {
+            text-decoration: underline;
+        }
+        .btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            border: 2px solid #8A2BE2;
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-custom:hover {
+            background-color: white;
+            color: #8A2BE2;
+            border: 2px solid #8A2BE2;
+        }
+    </style>
 {% endblock %}

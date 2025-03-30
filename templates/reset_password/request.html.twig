@@ -3,19 +3,65 @@
 {% block title %}Réinitialiser le mot de passe{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('reset_password_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
-    <h1>Réinitialiser votre mot de passe</h1>
+    <div class="request-container mt-5 text-center">
+        <h1 style="color: #8A2BE2;">Réinitialiser votre mot de passe</h1>
 
-    {{ form_start(requestForm) }}
-        {{ form_row(requestForm.email) }}
+        {% for flash_error in app.flashes('reset_password_error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ flash_error }}
+            </div>
+        {% endfor %}
+
+        {{ form_start(requestForm) }}
+        <div class="mb-3">
+            {{ form_label(requestForm.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(requestForm.email, {'attr': {'class': 'form-control'}}) }}
+        </div>
         <div>
-            <small>
-                Entrez votre email, un mail vous sera envoyé pour réinitialiser votre mot de passe
+            <small class="form-text text-muted">
+                Entrez votre email, un mail vous sera envoyé pour réinitialiser votre mot de passe.
             </small>
         </div>
 
-        <button class="btn btn-primary">Envoyer un mail</button>
-    {{ form_end(requestForm) }}
+        <button type="submit" class="btn-custom mt-3">Envoyer un mail</button>
+        {{ form_end(requestForm) }}
+    </div>
+
+    <style>
+        .btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            border: 2px solid #8A2BE2;
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-custom:hover {
+            background-color: white;
+            color: #8A2BE2;
+            border: 2px solid #8A2BE2;
+        }
+
+        .request-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #8A2BE2;
+        }
+
+        small {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-text {
+            margin-top: 10px;
+        }
+    </style>
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Subscription;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,6 +47,13 @@ class RegistrationController extends AbstractController
             $user->setFirstname($form->get('firstname')->getData());
             $user->setLastname($form->get('lastname')->getData());
 
+            $subscriptionRepo = $entityManager->getRepository(Subscription::class);
+            $defaultSubscription = $subscriptionRepo->findOneBy(['name' => 'Gratuit']);
+
+            if ($defaultSubscription) {
+                $user->setSubscription($defaultSubscription);
+            }
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -59,7 +67,6 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            // Connexion automatique après l'inscription
             return $security->login($user, 'form_login', 'main');
         }
 
