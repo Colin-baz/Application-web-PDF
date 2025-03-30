@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Générateur de PDF{% endblock %}
+
+{% block body %}
+    <div class="container m-2 text-center">
+        <h1 class="mt-5">Bienvenue sur notre application de générateur de PDF</h1>
+        <p class="m-3">Générer des PDF à l'aide d'URL, de fichier HTML et d'un éditeur de texte</p>
+
+        {% if user %}
+            <div class="m-5">
+                <h4 class="mt-5"><b>Nombre de PDF générés : ({{ pdfGeneratedToday }} / {{ maxPdfLimit }})</b></h4>
+                <div class="progress mt-3" style="height: 25px;">
+                    <div class="progress-bar progress-bar-striped" role="progressbar"
+                         style="width: {{ progress }}%; background-color: #8A2BE2;"
+                         aria-valuenow="{{ pdfGeneratedToday }}"
+                         aria-valuemin="0"
+                         aria-valuemax="{{ maxPdfLimit }}">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <h2 class="m-5">Fonctionnalités Principales</h2>
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card d-flex h-100">
+                    <div class="card-body">
+                        <h4 class="card-title m-4"><b>Générer PDF depuis URL</b></h4>
+                        <p class="card-text">Générez un PDF à partir d'une URL.</p>
+                        <a href="{{ user ? path('pdf_generate') : path('app_login') }}" class="btn btn-custom mt-5">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card d-flex h-100">
+                    <div class="card-body">
+                        <h4 class="card-title m-4"><b>Générer un PDF depuis un fichier HTML</b></h4>
+                        <p class="card-text">Vous avez la possibilité de générer un PDF à partir de votre propre fichier HTML </p>
+                        <a href="{{ user ? path('generate_pdf_from_html') : path('app_login') }}" class="btn btn-custom m-2">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card d-flex h-100">
+                    <div class="card-body">
+                        <h4 class="card-title m-4"><b>Générer PDF Personnalisé</b></h4>
+                        <p class="card-text">Vous avez la possibilité de générer un PDF que vous venez de créer dans l'éditeur de texte</p>
+                        <a href="{{ user ? path('generate_pdf_custom') : path('app_login') }}" class="btn btn-custom mt-4">En savoir plus</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="m-5">Choisissez votre abonnement</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card d-flex h-100">
+                    <div class="card-body">
+                        <div class="price-box">
+                            <span class="price">0€</span>
+                        </div>
+                        <h4 class="card-title mt-5"><b>Abonnement Gratuit</b></h4>
+                        <ul class="list-unstyled text-left mt-4">
+                            <li>Limite de PDF : 10</li>
+                            <li>Prix : Gratuit</li>
+                        </ul>
+                        <a href="{{ user ? path('subscription_change') : path('app_login') }}" class="btn btn-custom mt-5">Souscrire</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card d-flex h-100">
+                    <div class="card-body">
+                        <div class="price-box">
+                            <p class="price">9,99€<span>/mois</span></p>
+                        </div>
+                        <h4 class="card-title mt-5"><b>Abonnement Pro</b></h4>
+                        <ul class="list-unstyled text-left mt-4">
+                            <li>Limite de PDF : 100</li>
+                            <li>Un pin de l'entreprise</li>
+                            <li>Un dictionnaire Larousse</li>
+                            <li>Prix : 9,99€/mois</li>
+                        </ul>
+                        <a href="{{ user ? path('subscription_change') : path('app_login') }}" class="btn btn-custom mt-2">Souscrire</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card d-flex h-100">
+                    <div class="card-body">
+                        <div class="price-box">
+                            <p class="price">99,99€<span>/mois</span></p>
+                        </div>
+                        <h4 class="card-title mt-5"><b>Abonnement Entreprise</b></h4>
+                        <ul class="list-unstyled text-left mt-4">
+                            <li>Limite de PDF : 10 000</li>
+                            <li>Un trophée</li>
+                            <li>Une journée VIP à Disney</li>
+                            <li>Notre reconnaissance infinie</li>
+                            <li>Prix : 99,99€/mois</li>
+                        </ul>
+                        <a href="{{ user ? path('subscription_change') : path('app_login') }}" class="btn btn-custom">Souscrire</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .card-body {
+            position: relative;
+        }
+
+        h4{
+            font-size: 1.7rem;
+        }
+
+        a.btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        a.btn-custom:hover{
+            background-color: white;
+            color: #8A2BE2;
+            border: 1px solid #8A2BE2;
+        }
+
+        .price-box {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            background-color: #8A2BE2;
+            padding: 5px 15px;
+            border-radius: 0 5px 0 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .price span {
+            font-weight: normal;
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+    </style>
+{% endblock %}

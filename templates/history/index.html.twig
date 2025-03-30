@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Historique des PDFs{% endblock %}
+
+{% block body %}
+    <div class="history-container mt-5">
+        <h2 class="mb-4" style="color: #8A2BE2;">Historique des PDFs générés</h2>
+
+        {% if files is empty %}
+            <p>Aucun PDF généré pour l'instant.</p>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Nom du fichier</th>
+                    <th>Date de création</th>
+                    <th>Consulter ou télécharger</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for file in files %}
+                    <tr>
+                        <td>{{ file.name }}</td>
+                        <td>{{ file.createdAt|date('d/m/Y H:i') }}</td>
+                        <td>
+                            <a href="{{ path('history_view', { id: file.id }) }}" class="btn-custom btn-sm">
+                                Voir
+                            </a>
+                            <a href="{{ path('history_download', { id: file.id }) }}" class="btn-custom btn-sm">
+                                Télécharger
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    <style>
+        .btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            border: 2px solid #8A2BE2;
+            padding: 5px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+
+        .btn-custom:hover {
+            background-color: white;
+            color: #8A2BE2;
+            border: 2px solid #8A2BE2;
+        }
+
+        .history-container {
+            width: 80%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+{% endblock %}

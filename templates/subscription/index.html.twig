@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Changer d'abonnement{% endblock %}
+
+{% block body %}
+    <div class="sub-container mt-5">
+        <h2 class="text-center" style="color: #8A2BE2;">Changer votre abonnement</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label for="subscription" class="form-label">Sélectionnez un abonnement</label>
+                <select id="subscription" name="subscription" class="form-control">
+                    {% for subscription in subscriptions %}
+                        <option value="{{ subscription.name }}"
+                                {% if app.user.subscription is not null and app.user.subscription.name == subscription.name %}selected{% endif %}>
+                            {{ subscription.name }} - {{ subscription.price }}€/mois
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn-custom">Mettre à jour l'abonnement</button>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        .btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            border: 2px solid #8A2BE2;
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-custom:hover {
+            background-color: white;
+            color: #8A2BE2;
+            border: 2px solid #8A2BE2;
+        }
+
+        .sub-container {
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        select.form-control {
+            padding: 10px;
+        }
+
+        .mb-3 {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #8A2BE2;
+        }
+    </style>
+{% endblock %}

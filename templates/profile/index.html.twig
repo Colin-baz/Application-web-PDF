@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+    <div class="profile-container mt-4 text-center">
+        <h2 class="mb-3" style="color: #8A2BE2;">Mon Profil</h2>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <form method="post" action="{{ path('profile') }}">
+            <div class="mb-3">
+                <label class="form-label">Nom</label>
+                <input type="text" class="form-control" name="lastname" value="{{ user.lastname }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Prénom</label>
+                <input type="text" class="form-control" name="firstname" value="{{ user.firstname }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" value="{{ user.email }}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Abonnement</label>
+                <input type="text" class="form-control" value="{{ subscription.name }}" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Génération PDF</label>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: {{ pdfGenerated / maxPdfLimit * 100 }}%;"
+                         aria-valuenow="{{ pdfGenerated }}" aria-valuemin="0" aria-valuemax="{{ maxPdfLimit }}">
+                        {{ pdfGenerated }} / {{ maxPdfLimit }}
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-custom">Mettre à jour</button>
+        </form>
+
+        <hr>
+
+        <form method="post" action="{{ path('delete_account') }}">
+            <button type="submit" class="btn btn-danger">Supprimer mon compte</button>
+        </form>
+    </div>
+
+    <style>
+        .btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            border: 2px solid #8A2BE2;
+            padding: 10px 15px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-custom:hover {
+            background-color: white;
+            color: #8A2BE2;
+            border: 2px solid #8A2BE2;
+        }
+
+        .profile-container {
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Aperçu du PDF{% endblock %}
+
+{% block body %}
+    <div class="pdf-container mt-5 text-center">
+        <h2 class="mb-4" style="color: #8A2BE2;">Aperçu du PDF : {{ file.name }}</h2>
+
+        <div class="mb-4">
+            <embed src="{{ asset('pdf/' ~ file.name) }}" type="application/pdf" width="100%" height="600px" />
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ path('history') }}" class="btn-custom">
+                Retour
+            </a>
+            <a href="{{ path('history_download', { id: file.id }) }}" class="btn-custom">
+                Télécharger
+            </a>
+        </div>
+    </div>
+
+    <style>
+        .btn-custom {
+            background-color: #8A2BE2;
+            color: white;
+            border: 2px solid #8A2BE2;
+            padding: 10px 15px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-custom:hover {
+            background-color: white;
+            color: #8A2BE2;
+            border: 2px solid #8A2BE2;
+        }
+
+        .pdf-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        embed {
+            border: none;
+        }
+    </style>
+{% endblock %}
