@@ -24,6 +24,10 @@ class GeneratePdfController extends AbstractController
     public function generatePdf(Request $request): Response
     {
         $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
         $subscription = $user->getSubscription();
         $maxPdfLimit = $subscription ? $subscription->getMaxPdf() : 0;
 

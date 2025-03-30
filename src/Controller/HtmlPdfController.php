@@ -25,6 +25,11 @@ class HtmlPdfController extends AbstractController
 
     public function generatePdfFromHtml(Request $request): Response
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $form = $this->createForm(HtmlPdfUpload::class);
         $form->handleRequest($request);
 

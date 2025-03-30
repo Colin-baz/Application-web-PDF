@@ -31,10 +31,27 @@ jobs:
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install Cypress
+      run: npm install cypress --save-dev
+
+    - name: Install Cypress Dependencies
+      run: apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+
+    - name: Start Symfony server
+      run:  php -S 0.0.0.0:8319 -t public/
+
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
       run: vendor/bin/phpunit
+
+    - name: Run Cypress tests
+      run: npx cypress run --headless --browser chrome
 
     - name: Run PHP_CodeSniffer
       run: vendor/bin/phpcs --standard=PSR2 src/

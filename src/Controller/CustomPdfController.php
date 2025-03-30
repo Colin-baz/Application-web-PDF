@@ -25,8 +25,9 @@ class CustomPdfController extends AbstractController
     public function generatePdfFromWysiwyg(Request $request): Response
     {
         $user = $this->getUser();
+
         if (!$user) {
-            return $this->redirectToRoute('app_login'); // Redirige vers la page de connexion si non connecté
+            return $this->redirectToRoute('app_login');
         }
 
         $subscription = $user->getSubscription();
