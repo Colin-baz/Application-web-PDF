@@ -29,7 +29,6 @@ class ProfileController extends AbstractController
             $user->setFirstname($request->request->get('firstname'));
             $user->setEmail($request->request->get('email'));
 
-            // Sauvegarder les modifications
             $entityManager->flush();
 
             $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
@@ -50,9 +49,18 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        $fileRepository = $entityManager->getRepository(\App\Entity\File::class);
+        $files = $fileRepository->findBy(['user' => $user]);
+
+        foreach ($files as $file) {
+            $entityManager->remove($file);
+        }
+
+        $entityManager->flush();
+
         $entityManager->remove($user);
         $entityManager->flush();
 
-        return $this->redirectToRoute('app_logout');
+        return $this->redirectToRoute('app_register');
     }
 }

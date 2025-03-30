@@ -59,7 +59,6 @@ class UserRegistrationService
                 $user->setSubscription($defaultSubscription);
             }
 
-            // Persistance de l'utilisateur
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
