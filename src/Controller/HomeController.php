@@ -16,27 +16,31 @@ class HomeController extends AbstractController
     public function index(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
+        $subscription = $user ? $user->getSubscription() : null;
 
-        if (!$user) {
-            return $this->redirectToRoute('app_login');
+        if ($user) {
+            $today = new DateTime('today 00:00:00');
+            $tomorrow = new DateTime('tomorrow 00:00:00');
+
+            $pdfGeneratedToday = $entityManager->getRepository(File::class)
+                ->countPdfGeneratedByUserOnDate($user->getId(), $today, $tomorrow);
+
+            $maxPdfLimit = $subscription ? $subscription->getMaxPdf() : 0;
+
+            $progress = $maxPdfLimit > 0 ? ($pdfGeneratedToday / $maxPdfLimit) * 100 : 0;
+
+            return $this->render('home/index.html.twig', [
+                'progress' => $progress,
+                'pdfGeneratedToday' => $pdfGeneratedToday,
+                'maxPdfLimit' => $maxPdfLimit,
+                'user' => $user,
+                'subscription' => $subscription,
+            ]);
         }
 
-        $subscription = $user->getSubscription();
-
-        $today = new DateTime('today 00:00:00');
-        $tomorrow = new DateTime('tomorrow 00:00:00');
-
-        $pdfGeneratedToday = $entityManager->getRepository(File::class)
-            ->countPdfGeneratedByUserOnDate($user->getId(), $today, $tomorrow);
-
-        $maxPdfLimit = $subscription ? $subscription->getMaxPdf() : 0;
-
-        $progress = $maxPdfLimit > 0 ? ($pdfGeneratedToday / $maxPdfLimit) * 100 : 0;
-
         return $this->render('home/index.html.twig', [
-            'progress' => $progress,
-            'pdfGeneratedToday' => $pdfGeneratedToday,
-            'maxPdfLimit' => $maxPdfLimit
+            'user' => null,
+            'subscription' => null,
         ]);
     }
 }
